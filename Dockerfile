@@ -2,6 +2,7 @@
 # Lightweight n8n + Python Dockerfile
 # Optimized for Render Free Plan
 # Instance: 0.1 CPU / 512MB RAM
+# Last updated: 2026-06-29
 # =========================================================
 
 FROM node:20-bookworm-slim
@@ -55,7 +56,7 @@ RUN pip install --no-cache-dir \
 
 # ---------------------------------------------------------
 # Install stable n8n version
-# Node.js 20 compatible
+# Node.js 20 compatible (22+ required for newer n8n)
 # ---------------------------------------------------------
 
 RUN npm install -g n8n@1.95.3
@@ -79,29 +80,36 @@ WORKDIR /home/n8n
 ENV N8N_HOST=0.0.0.0
 ENV N8N_PORT=5678
 
-# Persistent storage — Render Disk: /home/n8n/.n8n
+# Persistent storage — Render Disk mount path: /home/n8n/.n8n
 ENV N8N_DATA_FOLDER=/home/n8n/.n8n
 
 # ---------------------------------------------------------
 # Memory optimization (512MB RAM)
+# n8n main process: 256MB
+# Task runner:      128MB
+# OS + buffer:      128MB
 # ---------------------------------------------------------
 
 ENV NODE_OPTIONS=--max-old-space-size=256
 
-# FIX: EXECUTIONS_PROCESS removed — deprecated, no longer needed in n8n 1.95.3
-
-# Auto cleanup old executions
-ENV N8N_PRUNING_ENABLED=true
-ENV N8N_PRUNING_EXECUTION_DATA_MAX_AGE=24
+# FIX: Removed EXECUTIONS_PROCESS — deprecated in n8n 1.95.3
 
 # ---------------------------------------------------------
 # Task Runners
-# FIX: Enabled to avoid deprecation warning
-# Memory limited to 128MB to protect 512MB RAM limit
+# FIX: Enabled to clear deprecation warning
+# Memory capped at 128MB to stay within 512MB total
 # ---------------------------------------------------------
 
 ENV N8N_RUNNERS_ENABLED=true
 ENV N8N_RUNNER_SERVER_MAX_OLD_SPACE_SIZE=128
+
+# ---------------------------------------------------------
+# Execution data cleanup
+# Prevents DB from growing and consuming RAM
+# ---------------------------------------------------------
+
+ENV N8N_PRUNING_ENABLED=true
+ENV N8N_PRUNING_EXECUTION_DATA_MAX_AGE=24
 
 # ---------------------------------------------------------
 # Disable unnecessary features
@@ -111,7 +119,7 @@ ENV N8N_DIAGNOSTICS_ENABLED=false
 ENV N8N_VERSION_NOTIFICATIONS_ENABLED=false
 ENV N8N_TEMPLATES_ENABLED=false
 
-# Disable queue/worker features
+# Disable queue/worker mode (not needed, saves RAM)
 ENV QUEUE_HEALTH_CHECK_ACTIVE=false
 ENV OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS=false
 
@@ -122,7 +130,7 @@ ENV OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS=false
 ENV N8N_SECURE_COOKIE=false
 
 # ---------------------------------------------------------
-# Healthcheck
+# Healthcheck — Render জানবে service কখন ready
 # ---------------------------------------------------------
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
@@ -135,7 +143,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
 EXPOSE 5678
 
 # ---------------------------------------------------------
-# Start n8n
+# Start n8n with tini (proper signal handling)
 # ---------------------------------------------------------
 
 CMD ["tini", "--", "n8n", "start"]
