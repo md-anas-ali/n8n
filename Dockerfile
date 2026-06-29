@@ -1,4 +1,4 @@
-FROM node:20-bookworm-slim
+FROM node:22-bookworm-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -37,7 +37,7 @@ RUN python3 -m venv /opt/venv
 # Activate venv globally
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Upgrade pip tools
+# Upgrade pip
 RUN pip install --upgrade pip setuptools wheel
 
 # Install Python packages
@@ -57,9 +57,6 @@ python-dotenv
 # Install n8n
 RUN npm install -g n8n
 
-# Install Python task runner
-RUN npm install -g @n8n/task-runner-python
-
 # Create n8n user
 RUN useradd -m -s /bin/bash n8n
 
@@ -72,11 +69,8 @@ WORKDIR /home/n8n
 
 # n8n settings
 ENV N8N_PORT=5678
-
-# Enable runners
 ENV N8N_RUNNERS_ENABLED=true
 ENV N8N_RUNNERS_MODE=internal
-ENV N8N_RUNNERS_PYTHON_ENABLED=true
 
 # Python executable
 ENV PYTHON_EXECUTABLE=/opt/venv/bin/python
