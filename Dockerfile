@@ -1,23 +1,58 @@
 FROM node:20-bookworm-slim
 
-# Install system dependencies
-RUN apt-get update \
-  && apt-get install -y ffmpeg python3 python3-pip ca-certificates curl \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Install yt-dlp
-RUN pip3 install --break-system-packages --no-cache-dir yt-dlp
+RUN apt-get update && \
+apt-get install -y --no-install-recommends \
+ffmpeg \
+python3 \
+python3-pip \
+python3-venv \
+curl \
+wget \
+git \
+bash \
+nano \
+vim \
+jq \
+zip \
+unzip \
+tar \
+gzip \
+ca-certificates \
+imagemagick \
+ghostscript \
+tesseract-ocr \
+mediainfo \
+sox && \
+apt-get clean && \
+rm -rf /var/lib/apt/lists/*
 
-# Install n8n
+RUN python3 -m pip install --upgrade pip --break-system-packages
+
+RUN pip3 install --break-system-packages --no-cache-dir \
+edge-tts \
+yt-dlp \
+requests \
+pandas \
+numpy \
+pillow \
+moviepy \
+openpyxl \
+beautifulsoup4 \
+lxml \
+python-dotenv
+
 RUN npm install -g n8n
 
-# Create n8n user
-RUN useradd -m n8n
+RUN useradd -m -s /bin/bash n8n
+
 USER n8n
 
-# n8n environment
+WORKDIR /home/n8n
+
 ENV N8N_PORT=5678
+
 EXPOSE 5678
 
-CMD ["n8n", "start"]
+CMD ["n8n","start"]
