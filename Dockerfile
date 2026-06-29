@@ -52,13 +52,12 @@ moviepy \
 openpyxl \
 beautifulsoup4 \
 lxml \
-python-dotenv \
-n8n-python
+python-dotenv
 
 # Install n8n
 RUN npm install -g n8n
 
-# Install Python runner support
+# Install Python task runner
 RUN npm install -g @n8n/task-runner-python
 
 # Create n8n user
@@ -74,12 +73,12 @@ WORKDIR /home/n8n
 # n8n settings
 ENV N8N_PORT=5678
 
-# Enable task runners
+# Enable runners
 ENV N8N_RUNNERS_ENABLED=true
 ENV N8N_RUNNERS_MODE=internal
 ENV N8N_RUNNERS_PYTHON_ENABLED=true
 
-# Python path
+# Python executable
 ENV PYTHON_EXECUTABLE=/opt/venv/bin/python
 
 EXPOSE 5678
