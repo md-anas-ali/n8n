@@ -55,7 +55,7 @@ RUN pip install --no-cache-dir \
 
 # ---------------------------------------------------------
 # Install stable n8n version
-# Node.js 20 compatible (22+ required for newer n8n)
+# Node.js 20 compatible
 # ---------------------------------------------------------
 
 RUN npm install -g n8n@1.95.3
@@ -87,11 +87,21 @@ ENV N8N_DATA_FOLDER=/home/n8n/.n8n
 # ---------------------------------------------------------
 
 ENV NODE_OPTIONS=--max-old-space-size=256
-ENV EXECUTIONS_PROCESS=main
+
+# FIX: EXECUTIONS_PROCESS removed — deprecated, no longer needed in n8n 1.95.3
 
 # Auto cleanup old executions
 ENV N8N_PRUNING_ENABLED=true
 ENV N8N_PRUNING_EXECUTION_DATA_MAX_AGE=24
+
+# ---------------------------------------------------------
+# Task Runners
+# FIX: Enabled to avoid deprecation warning
+# Memory limited to 128MB to protect 512MB RAM limit
+# ---------------------------------------------------------
+
+ENV N8N_RUNNERS_ENABLED=true
+ENV N8N_RUNNER_SERVER_MAX_OLD_SPACE_SIZE=128
 
 # ---------------------------------------------------------
 # Disable unnecessary features
@@ -101,11 +111,7 @@ ENV N8N_DIAGNOSTICS_ENABLED=false
 ENV N8N_VERSION_NOTIFICATIONS_ENABLED=false
 ENV N8N_TEMPLATES_ENABLED=false
 
-# Disable task runners — 512MB RAM-এ reliable না
-# N8N_RUNNERS_ENABLED is the confirmed variable for n8n 1.95.3
-ENV N8N_RUNNERS_ENABLED=false
-
-# Disable queue/worker features (not needed, saves RAM)
+# Disable queue/worker features
 ENV QUEUE_HEALTH_CHECK_ACTIVE=false
 ENV OFFLOAD_MANUAL_EXECUTIONS_TO_WORKERS=false
 
