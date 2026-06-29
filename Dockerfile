@@ -2,6 +2,7 @@ FROM node:20-bookworm-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Install system packages
 RUN apt-get update && \
 apt-get install -y --no-install-recommends \
 ffmpeg \
@@ -28,9 +29,17 @@ sox && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m pip install --upgrade pip --break-system-packages
+# Create Python virtual environment
+RUN python3 -m venv /opt/venv
 
-RUN pip3 install --break-system-packages --no-cache-dir \
+# Activate venv path
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Upgrade pip
+RUN pip install --upgrade pip
+
+# Install Python packages
+RUN pip install --no-cache-dir \
 edge-tts \
 yt-dlp \
 requests \
@@ -43,16 +52,19 @@ beautifulsoup4 \
 lxml \
 python-dotenv
 
+# Install n8n
 RUN npm install -g n8n
 
+# Create n8n user
 RUN useradd -m -s /bin/bash n8n
 
 USER n8n
 
 WORKDIR /home/n8n
 
+# n8n settings
 ENV N8N_PORT=5678
 
 EXPOSE 5678
 
-CMD ["n8n","start"]
+CMD ["n8n", "start"]
