@@ -3,36 +3,94 @@ services:
     name: n8n
     runtime: docker
     repo: https://github.com/lakshcode9/n8n
-    region: virginia
-    plan: starter
     branch: main
+
+    plan: free
+    region: virginia
+
     dockerfilePath: ./Dockerfile
     dockerContext: ./
+
+    autoDeploy: true
+
+    healthCheckPath: /
+
     envVars:
-      - key: N8N_PORT
-        value: 5678
-      - key: N8N_PROTOCOL
-        value: https
+
+      # Host
       - key: N8N_HOST
         sync: false
-      - key: N8N_EDITOR_BASE_URL
-        sync: false
+
+      - key: N8N_PROTOCOL
+        value: https
+
+      - key: N8N_PORT
+        value: "5678"
+
       - key: WEBHOOK_URL
         sync: false
+
+      - key: N8N_EDITOR_BASE_URL
+        sync: false
+
+      # Database
+      - key: DB_TYPE
+        value: postgresdb
+
+      - key: DB_POSTGRESDB_HOST
+        sync: false
+
+      - key: DB_POSTGRESDB_PORT
+        value: "5432"
+
+      - key: DB_POSTGRESDB_DATABASE
+        sync: false
+
+      - key: DB_POSTGRESDB_USER
+        sync: false
+
+      - key: DB_POSTGRESDB_PASSWORD
+        sync: false
+
+      - key: DB_POSTGRESDB_SSL_ENABLED
+        value: "true"
+
+      # Security
       - key: N8N_ENCRYPTION_KEY
         sync: false
-      - key: N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS
+
+      - key: N8N_BASIC_AUTH_ACTIVE
         value: "true"
-      - key: N8N_BLOCK_ENV_ACCESS_IN_NODE
-        value: "false"
-      - key: N8N_TRUSTED_PROXIES
-        value: "0.0.0.0/0"
+
+      - key: N8N_BASIC_AUTH_USER
+        sync: false
+
+      - key: N8N_BASIC_AUTH_PASSWORD
+        sync: false
+
+      # Timezone
       - key: GENERIC_TIMEZONE
-        value: America/New_York
+        value: Asia/Dhaka
+
       - key: TZ
-        value: America/New_York
-      # Data pruning
-      - key: EXECUTIONS_DATA_PRUNE
+        value: Asia/Dhaka
+
+      # Performance
+      - key: NODE_OPTIONS
+        value: --max-old-space-size=384
+
+      - key: N8N_RUNNERS_ENABLED
+        value: "false"
+
+      - key: N8N_DEFAULT_BINARY_DATA_MODE
+        value: filesystem
+
+      # Cleanup
+      - key: N8N_PRUNING_ENABLED
         value: "true"
-      - key: EXECUTIONS_DATA_MAX_AGE
+
+      - key: N8N_PRUNING_EXECUTION_DATA_MAX_AGE
         value: "168"
+
+      - key: EXECUTIONS_DATA_PRUNE_MAX_COUNT
+        value: "5000"
