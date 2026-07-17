@@ -1,6 +1,202 @@
 <div align="center">
 
-# 🚀 n8n Self-Hosted with Custom Dependencies
+# 🚀 n8🚀 n8n Ultimate Free Deployment
+
+«Production-ready n8n deployment using Docker, Render, and External PostgreSQL.»
+
+"Docker" (https://img.shields.io/badge/Docker-Ready-blue)
+"n8n" (https://img.shields.io/badge/n8n-Latest-orange)
+"PostgreSQL" (https://img.shields.io/badge/PostgreSQL-Supported-blue)
+"Render" (https://img.shields.io/badge/Render-Free-success)
+
+---
+
+✨ Features
+
+- 🚀 Deploy n8n on Render
+- 🐳 Custom Dockerfile support
+- 🐘 External PostgreSQL support
+- 🔒 Secure Environment Variables
+- 💾 Persistent workflows & credentials
+- 🎬 FFmpeg pre-installed
+- 🐍 Python support
+- 📦 yt-dlp pre-installed
+- ⚡ Optimized for low-memory servers
+- 🔄 GitHub Auto Deploy
+- 🌍 Custom Domain support
+- 🛡 Production-ready configuration
+
+---
+
+📦 Included
+
+- n8n
+- Docker
+- FFmpeg
+- Python 3
+- yt-dlp
+- curl
+- wget
+- Git
+
+---
+
+🗄 Supported Databases
+
+- ✅ Neon PostgreSQL
+- ✅ Supabase PostgreSQL
+- ✅ PostgreSQL Compatible Servers
+
+---
+
+☁ Supported Hosting
+
+- Render
+- VPS
+- Railway
+- Coolify
+- Docker
+- Docker Compose
+
+---
+
+🚀 Quick Deploy
+
+1. Fork this repository.
+2. Create a Render Web Service.
+3. Connect your GitHub repository.
+4. Add the required Environment Variables.
+5. Deploy.
+
+---
+
+🔐 Required Environment Variables
+
+Host
+
+N8N_HOST=
+N8N_PROTOCOL=https
+N8N_PORT=5678
+WEBHOOK_URL=
+N8N_EDITOR_BASE_URL=
+
+PostgreSQL
+
+DB_TYPE=postgresdb
+DB_POSTGRESDB_HOST=
+DB_POSTGRESDB_PORT=5432
+DB_POSTGRESDB_DATABASE=
+DB_POSTGRESDB_USER=
+DB_POSTGRESDB_PASSWORD=
+DB_POSTGRESDB_SSL_ENABLED=true
+
+Security
+
+N8N_ENCRYPTION_KEY=
+
+«Never change the encryption key after the first deployment.»
+
+---
+
+📂 Data Persistence
+
+When using PostgreSQL:
+
+- ✅ Workflows remain safe
+- ✅ Credentials remain safe
+- ✅ Settings remain safe
+- ✅ Users remain safe
+
+Even if Render restarts or redeploys, your data remains in PostgreSQL.
+
+---
+
+📁 Dockerfile
+
+The Docker image already includes:
+
+- FFmpeg
+- Python
+- yt-dlp
+- Node.js
+- n8n
+
+You can easily install additional packages inside the Dockerfile.
+
+---
+
+⚡ Performance
+
+Optimized for:
+
+- Render Free
+- 512MB RAM
+- Low CPU
+- Production usage
+
+---
+
+🔄 Auto Deploy
+
+Every push to the main branch automatically triggers a new deployment on Render.
+
+---
+
+🛠 Troubleshooting
+
+Database Connection Error
+
+- Verify PostgreSQL credentials.
+- Ensure SSL is enabled.
+- Confirm the host and port.
+
+---
+
+Lost Workflows
+
+Check:
+
+- DB_TYPE
+- PostgreSQL connection
+- N8N_ENCRYPTION_KEY
+
+---
+
+Render Restart
+
+No problem.
+
+If the same PostgreSQL database and the same encryption key are used, all workflows, credentials, users, and settings remain available.
+
+---
+
+📌 Best Practices
+
+- Keep your encryption key safe.
+- Store secrets only in Render Environment Variables.
+- Never commit passwords to GitHub.
+- Use an external PostgreSQL database.
+- Enable execution pruning.
+
+---
+
+📜 License
+
+This repository contains deployment configuration and examples.
+
+Please review the licenses of all included software (such as n8n and any installed dependencies) before using them in production.
+
+---
+
+❤️ Contributing
+
+Issues and pull requests are welcome.
+
+---
+
+⭐ Support
+
+If this project helps you, consider giving it a ⭐ on GitHub. Self-Hosted with Custom Dependencies
 
 ### Free Forever Stack + Custom Dockerfile Template
 
