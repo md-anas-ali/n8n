@@ -2,7 +2,7 @@ services:
   - type: web
     name: n8n
     runtime: docker
-    repo: https://github.com/lakshcode9/n8n
+    repo: https://github.com/md-anas-ali/n8n.git
     branch: main
 
     plan: free
