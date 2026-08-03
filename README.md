@@ -88,12 +88,9 @@ N8N_EDITOR_BASE_URL=
 PostgreSQL
 
 DB_TYPE=postgresdb
-DB_POSTGRESDB_HOST=
-DB_POSTGRESDB_PORT=5432
-DB_POSTGRESDB_DATABASE=
-DB_POSTGRESDB_USER=
-DB_POSTGRESDB_PASSWORD=
-DB_POSTGRESDB_SSL_ENABLED=true
+DB_POSTGRESDB_CONNECTION_URL=
+
+«entrypoint.sh parses this single connection URL into the individual DB_POSTGRESDB_HOST/PORT/DATABASE/USER/PASSWORD/SSL_ENABLED variables n8n reads at startup — n8n itself does not read a single URL variable natively.»
 
 Security
 
@@ -202,6 +199,7 @@ your workflows, credentials, users, and settings will still be available.
 
 .
 ├── Dockerfile
+├── entrypoint.sh
 ├── render.yaml
 ├── README.md
 ├── .gitignore

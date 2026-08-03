@@ -13,7 +13,7 @@ services:
 
     autoDeploy: true
 
-    healthCheckPath: /
+    healthCheckPath: /healthz
 
     envVars:
 
