@@ -1,3 +1,9 @@
+databases:
+  - name: n8n-db
+    plan: free
+    region: virginia
+    postgresMajorVersion: 16
+
 services:
   - type: web
     name: n8n
@@ -36,24 +42,36 @@ services:
       - key: APP_REFERER_URL
         sync: false
 
-      # Database
+      # Database — auto-wired to the "n8n-db" service above.
+      # These replace the old sync:false placeholders so the host
+      # can never be blank / fall back to localhost.
       - key: DB_TYPE
         value: postgresdb
 
       - key: DB_POSTGRESDB_HOST
-        sync: false
+        fromDatabase:
+          name: n8n-db
+          property: host
 
       - key: DB_POSTGRESDB_PORT
-        value: "5432"
+        fromDatabase:
+          name: n8n-db
+          property: port
 
       - key: DB_POSTGRESDB_DATABASE
-        sync: false
+        fromDatabase:
+          name: n8n-db
+          property: database
 
       - key: DB_POSTGRESDB_USER
-        sync: false
+        fromDatabase:
+          name: n8n-db
+          property: user
 
       - key: DB_POSTGRESDB_PASSWORD
-        sync: false
+        fromDatabase:
+          name: n8n-db
+          property: password
 
       - key: DB_POSTGRESDB_SSL_ENABLED
         value: "true"
