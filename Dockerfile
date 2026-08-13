@@ -101,7 +101,7 @@ ENV N8N_DATA_FOLDER=/home/n8n/.n8n
 # OS + buffer:      128MB
 # ---------------------------------------------------------
 
-ENV NODE_OPTIONS=--max-old-space-size=256
+ENV NODE_OPTIONS=--max-old-space-size=280
 
 # FIX: Removed EXECUTIONS_PROCESS — deprecated in n8n 1.95.3
 
