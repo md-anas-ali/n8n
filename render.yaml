@@ -69,15 +69,29 @@ services:
       - key: TZ
         value: Asia/Dhaka
 
-      # Performance
+      # ---------------------------------------------------
+      # Performance — 330MB total RAM budget
+      # FIXED: this was previously "--max-old-space-size=256"
+      # with no semi-space cap, which silently overrode the
+      # Dockerfile's tighter 110/16 setting on every deploy
+      # (Render env vars win over Dockerfile ENV of the same
+      # name). That's the single biggest reason earlier RAM
+      # tuning wasn't actually taking effect in production.
+      # ---------------------------------------------------
       - key: NODE_OPTIONS
-        value: --max-old-space-size=256
+        value: --max-old-space-size=110 --max-semi-space-size=16
 
       - key: N8N_RUNNERS_ENABLED
         value: "false"
 
       - key: N8N_DEFAULT_BINARY_DATA_MODE
         value: filesystem
+
+      - key: N8N_AVAILABLE_BINARY_DATA_MODES
+        value: filesystem
+
+      - key: N8N_BINARY_DATA_TTL
+        value: "60"
 
       - key: N8N_CONCURRENCY_PRODUCTION_LIMIT
         value: "1"
@@ -91,7 +105,23 @@ services:
       - key: EXECUTIONS_TIMEOUT
         value: "3600"
 
+      - key: N8N_PUBLIC_API_DISABLED
+        value: "true"
+
+      - key: N8N_METRICS
+        value: "false"
+
+      - key: UV_THREADPOOL_SIZE
+        value: "2"
+
       # Cleanup
+      # NOTE: kept at your original 24h/5000 rather than the 6h
+      # I used in the Dockerfile default — with an external Neon
+      # Postgres DB (not local SQLite), execution-data pruning is
+      # about Neon storage/query speed, not Render container RAM,
+      # so there's no RAM reason to prune more aggressively. Trim
+      # these lower only if Neon storage or query latency becomes
+      # a problem on its own.
       - key: N8N_PRUNING_ENABLED
         value: "true"
 
@@ -119,6 +149,9 @@ services:
 
       - key: N8N_LOG_LEVEL
         value: warn
+
+      - key: N8N_LOG_OUTPUT
+        value: console
 
       # --- Workflow: AI script-generation keys ---
       - key: GEMINI_API_KEY
